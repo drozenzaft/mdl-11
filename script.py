@@ -51,6 +51,7 @@ def run(filename):
     for command in script:
         line = command[0]
         args = command[1:]
+        print [line]+list(args)
         if line == 'push':
             stack.append([x[:] for x in stack[-1]])
         elif line == 'pop':
@@ -74,32 +75,47 @@ def run(filename):
             matrix_mult( stack[-1], t )
             stack[-1] = [ x[:] for x in t]
         elif line == 'box':
+            i = 0
+            if not isinstance(args[0],float):
+                i += 1
             add_box(polygons,
-                    float(args[0]), float(args[1]), float(args[2]),
-                    float(args[3]), float(args[4]), float(args[5]))
+                    float(args[0+i]), float(args[1+i]), float(args[2+i]),
+                    float(args[3+i]), float(args[4+i]), float(args[5+i]))
             matrix_mult( stack[-1], polygons )
             draw_polygons(polygons, screen, zbuffer, view, ambient, light, areflect, dreflect, sreflect)
             polygons = []
         elif line == 'sphere':
+            i = 0
+            if not isinstance(args[0],float):
+                i += 1
             add_sphere(polygons,
-                       float(args[0]), float(args[1]), float(args[2]),
-                       float(args[3]), step_3d)
+                       float(args[0+i]), float(args[1+i]), float(args[2+i]),
+                       float(args[3+i]), step_3d)
             matrix_mult( stack[-1], polygons )
             draw_polygons(polygons, screen, zbuffer, view, ambient, light, areflect, dreflect, sreflect)
             polygons = []
         elif line == 'torus':
+            i = 0
+            if not isinstance(args[0],float):
+                i += 1
             add_torus(polygons,
-                      float(args[0]), float(args[1]), float(args[2]),
-                      float(args[3]), float(args[4]), step_3d)
+                      float(args[0+i]), float(args[1+i]), float(args[2+i]),
+                      float(args[3+i]), float(args[4+i]), step_3d)
             matrix_mult( stack[-1], polygons )
             draw_polygons(polygons, screen, zbuffer, view, ambient, light, areflect, dreflect, sreflect)
             polygons = []
         elif line == 'line':
+            i = 0
+            if not isinstance(args[0],float):
+                i += 1
+            j = 0
+            if not isinstance(args[3+i],float):
+                j += 1
             add_edge( edges,
-                      float(args[0]), float(args[1]), float(args[2]),
-                      float(args[3]), float(args[4]), float(args[5]) )
-            matrix_mult( systems[-1], edges )
-            draw_lines(eges, screen, zbuffer, color)
+                      float(args[0+i]), float(args[1+i]), float(args[2+i]),
+                      float(args[3+i+j]), float(args[4+i+j]), float(args[5+i+j]))
+            matrix_mult( stack[-1], edges )
+            draw_lines(edges, screen, zbuffer, color)
             edges = []
         elif line == 'save':
             save_extension(screen, args[0]+args[1])
